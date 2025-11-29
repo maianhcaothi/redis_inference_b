@@ -1,0 +1,25 @@
+# ====== RabbitMQ ======
+rabbit:
+  address: "localhost"
+  username: "guest"
+  password: "guest"
+  virtual-host: "/"
+
+queues:
+  ready: "ready_queue"
+  ping: "ping_queue"
+  pong: "pong_queue"
+
+# ====== Redis ======
+redis:
+  host: "localhost"
+  port: 6379
+  db: 0
+
+channels:
+  ready: "ready_ch"
+  ping: "ping_ch"
+  pong: "pong_ch"
+
+# ====== COMMON SETTINGS ======
+num_rounds: 100
