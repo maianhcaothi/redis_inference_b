@@ -5,7 +5,7 @@ from src.rabbitmq.sender import Sender
 from src.rabbitmq.receiver import Receiver
 
 
-def main():
+def rabbit_mq():
     parser = argparse.ArgumentParser("RabbitMQ Runner")
 
     parser.add_argument(
@@ -33,4 +33,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    rabbit_mq()
+    # redis()
+    # kafka()

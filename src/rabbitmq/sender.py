@@ -2,7 +2,7 @@ import pika
 import pickle
 import time
 from statistics import mean
-from src.Utils import load_config
+from src.Utils import load_config , get_message
 
 class Sender:
     def __init__(self, config):
@@ -13,6 +13,8 @@ class Sender:
         self.pong_queue  = config["queues"]["pong"]
 
         self.num_rounds = config.get("num_rounds", 100)
+        self.size_MB = config["message_size"]
+        self.message = get_message(self.size_MB)
 
         self.connection = pika.BlockingConnection(
             pika.ConnectionParameters(
@@ -43,7 +45,9 @@ class Sender:
                 return
 
     def measure_round_trip(self):
-        message = {"signal": "PING"}
+        message = {
+            "signal": self.message
+        }
 
         start_ns = time.time_ns()
 
