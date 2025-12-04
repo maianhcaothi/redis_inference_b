@@ -65,6 +65,6 @@ def redis():
             app.clean()
 
 if __name__ == "__main__":
-    rabbit_mq()
-    # redis()
+    # rabbit_mq()
+    redis()
     # kafka()

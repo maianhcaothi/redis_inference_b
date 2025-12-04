@@ -13,6 +13,11 @@ class RedisReceiver:
         self.ping_queue  = config["queues"]["ping"]
         self.pong_queue  = config["queues"]["pong"]
         self.num_rounds = config["num_rounds"]
+        self.cnt = config["message_size"]
+        if self.cnt == 0:
+            self.cnt = 15
+        else:
+            self.cnt = 1
 
         self.r = redis.StrictRedis(
             host=redis_config["host"],
@@ -23,33 +28,35 @@ class RedisReceiver:
         print("Redis Receiver initialized")
 
     def run(self):
-        print("Receiver started — sending READY signal")
+        while self.cnt > 0 :
+            self.cnt -= 1
+            print("Receiver started — sending READY signal")
 
-        # Signal sender we are ready
-        self.r.rpush(
-            self.ready_queue,
-            pickle.dumps({"signal": "READY"})
-        )
+            # Signal sender we are ready
+            self.r.rpush(
+                self.ready_queue,
+                pickle.dumps({"signal": "READY"})
+            )
 
-        print(f"Waiting for {self.num_rounds} pings...")
+            print(f"Waiting for {self.num_rounds} pings...")
 
-        received = 0
+            received = 0
 
-        while received < self.num_rounds:
-            item = self.r.blpop(self.ping_queue, timeout=1)
+            while received < self.num_rounds:
+                item = self.r.blpop(self.ping_queue, timeout=1)
 
-            if item:
-                _,body = item
-                data = pickle.loads(body)
+                if item:
+                    _,body = item
+                    data = pickle.loads(body)
 
-                # Echo back
-                self.r.rpush(
-                    self.pong_queue,
-                    pickle.dumps(data)
-                )
+                    # Echo back
+                    self.r.rpush(
+                        self.pong_queue,
+                        pickle.dumps(data)
+                    )
 
-                received += 1
-                # print(f"Ping {received}/{self.num_rounds} echoed")
+                    received += 1
+                    # print(f"Ping {received}/{self.num_rounds} echoed")
 
         print("All pings processed")
 
