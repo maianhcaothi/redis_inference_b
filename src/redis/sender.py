@@ -13,6 +13,8 @@ class RedisSender:
         self.pong_queue  = config["queues"]["pong"]
 
         self.num_rounds = config.get("num_rounds", 100)
+        self.size_MB = config["message_size"]
+        self.message = get_message(self.size_MB)
 
         self.r = redis.StrictRedis(
             host=redis_config["host"],
@@ -32,7 +34,9 @@ class RedisSender:
                 return
 
     def measure_round_trip(self):
-        message = {"signal": "PING"}
+        message = {
+        "signal": self.message  # <-- SỬ DỤNG BẢN TIN LỚN Ở ĐÂY
+    }
 
         start_ns = time.time_ns()
 
