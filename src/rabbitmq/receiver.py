@@ -3,7 +3,7 @@ import pickle
 from src.Utils import load_config
 
 
-class Receiver:
+class RabbitMQReceiver:
 
     def __init__(self, config):
         rabbit = config["rabbit"]

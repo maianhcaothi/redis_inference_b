@@ -2,9 +2,9 @@ import pika
 import pickle
 import time
 from statistics import mean
-from src.Utils import load_config , get_message
+from src.Utils import load_config, get_message
 
-class Sender:
+class RabbitMQSender:
     def __init__(self, config):
         rabbit = config["rabbit"]
 
