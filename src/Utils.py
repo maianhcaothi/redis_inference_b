@@ -5,6 +5,8 @@ def load_config(path="./cfg/config.yaml"):
         return yaml.safe_load(f)
 
 def get_message(size_MB):
+    if size_MB >= 5 :
+        size_MB = 1
     return b"A"*(size_MB*1024*1024)
 
 
